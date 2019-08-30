@@ -21,6 +21,8 @@ function judgeUserIsLogin(req){
             reject(err);
         });
     });
+
+    //test
 }
 
 module.exports = {
