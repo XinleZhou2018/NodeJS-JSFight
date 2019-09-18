@@ -6,7 +6,9 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-const index = require('./routes/index')
+//import router
+const homepage = require('./routes/homepage')
+const match = require('./routes/match')
 const users = require('./routes/users')
 
 // error handler
@@ -32,8 +34,9 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-// routes
-app.use(index.routes(), index.allowedMethods())
+// regist routes
+app.use(homepage.routes(), homepage.allowedMethods())
+app.use(match.routes(), match.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
 // error-handling

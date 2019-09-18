@@ -20,9 +20,12 @@
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
     "koa2-redis": "^1.0.1",
+    "moment": "^2.24.0",
     "mysql": "^2.17.1",
+    "node-uuid": "^1.4.8",
     "pug": "^2.0.3",
     "redis": "^2.8.0",
+    "request": "^2.88.0",
     "xss": "^1.0.6"
   },
   "devDependencies": {

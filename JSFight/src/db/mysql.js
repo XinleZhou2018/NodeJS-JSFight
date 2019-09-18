@@ -18,8 +18,6 @@ function exec(sql, params) {
       }
       resolve(result);
     });
-
-    
   });
 }
 

@@ -1,13 +1,43 @@
+const { login, changeUserProfile } = require('../src/controller/users.js');
+const { SuccessModel, ErrorModel } = require('../src/model/resModel.js');
+const ErrorCode = require('../src/consts/const.js');
+
 const router = require('koa-router')()
 
-router.prefix('/users')
+//用户登录
+const USER_LOGIN = '/login';
 
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
-})
+//修改个人信息-昵称和头像，每次进入微信小程序后，获取用户信息，然后上传昵称和头像等
+const USER_CHANGEPROFILE = '/changeprofile';
 
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
-})
+router.prefix('/api/user')
 
-module.exports = router
+router.post(USER_LOGIN, async function (ctx, next){
+  try {
+      let result = await login(ctx);
+
+      ctx.body = new SuccessModel(result, ErrorCode.ErrorCode_Success);
+  } catch (error) {
+      if (error && error.defined_code){
+          ctx.body = new ErrorModel(null, error);
+      }else{
+          ctx.body = new ErrorModel(error.toString(), ErrorCode.ErrorCode_DefaultError);
+      }
+  }    
+});
+
+router.post(USER_CHANGEPROFILE, async function (ctx, next){
+  //TODO
+  try {
+    let result = await changeUserProfile(ctx);
+    ctx.body = new SuccessModel(result, ErrorCode.ErrorCode_Success);
+  } catch (error) {
+    if (error && error.defined_code){
+      ctx.body = new ErrorModel(null, error);
+  }else{
+      ctx.body = new ErrorModel(error.toString(), ErrorCode.ErrorCode_DefaultError);
+  }
+  }    
+});
+
+module.exports = router;
