@@ -1,4 +1,4 @@
-const { login, changeUserProfile } = require('../src/controller/users.js');
+const { login, changeUserProfile } = require('../src/controller/user.js');
 const { SuccessModel, ErrorModel } = require('../src/model/resModel.js');
 const ErrorCode = require('../src/consts/const.js');
 
