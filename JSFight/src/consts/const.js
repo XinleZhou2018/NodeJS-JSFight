@@ -35,9 +35,11 @@ const ErrorCode = {
         defined_code : 1007,
         msg : '无效的首页状态值'
     },
-    ErrorCode_RedisReadError : {
-        defined_code : 1008,
-        msg : 'Redis读取错误'
+    ErrorCode_QueryStringParseError : {
+        defined_code : 1009,
+        msg : 'queryString转换字符串到对象错误',
+        type: 'Internal',
+        status: 500
     },
 }
 

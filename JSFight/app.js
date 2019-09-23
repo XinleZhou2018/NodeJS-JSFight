@@ -6,6 +6,12 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
+const {DefinedError} = require('./src/model/errorModel.js');
+const { SuccessModel, ErrorModel } = require('./src/model/resModel.js')
+const ErrorCode = require('./src/consts/const.js');
+
+const errorHandler = require('./src/middleware/errorHandle.js');
+
 //import router
 const homepage = require('./routes/homepage')
 const match = require('./routes/match')
@@ -13,6 +19,20 @@ const users = require('./routes/users')
 
 // error handler
 onerror(app)
+
+/**
+ * 注册错误处理的中间件
+*/
+app.use(errorHandler);
+
+// app.use(async (ctx, next) => {
+//   try {
+//     await next();
+//   } catch (err) {
+//     //可以直接在这个
+//     ctx.app.emit("error", err, ctx);
+//   }
+// });
 
 // middlewares
 app.use(bodyparser({
@@ -42,6 +62,25 @@ app.use(users.routes(), users.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
+
+  // 如果没有错误处理的中间件 ，在这个方法中只能返回格式是html的错误信息，不是json
+  // if (err instanceof DefinedError){
+  //   if (err.errorObj.type){
+  //     //内部错误，需要记录日志等
+  //     console.log('自定义错误 - 已知错误');
+  //     ctx.response.status = 500;
+  //     ctx.body = new ErrorModel(null, ErrorCode.ErrorCode_DefaultError);
+  //   }else{
+  //     console.log('自定义错误 - 已知错误');
+  //     ctx.response.status = 200;
+  //     ctx.body = new ErrorModel(null, err.errorObj);
+  //   }
+
+  // }else{
+  //   console.log('未知错误');
+  //   ctx.status = 500;
+  //   ctx.body = new ErrorModel(err.toString(), ErrorCode.ErrorCode_DefaultError)
+  // }
 });
 
 module.exports = app

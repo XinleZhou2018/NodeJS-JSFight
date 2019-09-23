@@ -3,6 +3,7 @@ const moment = require('moment');
 //Controller层中调用数据库，构造返回数据
 const { exec } = require('../db/mysql.js');
 const ErrorCode = require('../consts/const.js');
+const {DefinedError} = require('../model/errorModel.js');
 
 async function getHomePageData() {
     let moment_time = moment();
@@ -10,9 +11,6 @@ async function getHomePageData() {
     //首先检查首页状态
     let sql = 'select hp_status from homepageStatus';
 
-    console.log(sql);
-
-    try {
         //模拟一个错误
         // var test = undefined;
         // console.log(test.toString());
@@ -20,7 +18,7 @@ async function getHomePageData() {
         let result = await exec(sql);
 
         if (!result || result.length <= 0) {
-            return Promise.reject(ErrorCode.ErrorCode_InvalidHomePageStatus);
+            throw new DefinedError(ErrorCode.ErrorCode_InvalidHomePageStatus);
         }
 
         let hpStatus = result[0]['hp_status'];
@@ -100,12 +98,9 @@ async function getHomePageData() {
                 //TODO
                 break;
             default:
-                return Promise.reject(ErrorCode.ErrorCode_InvalidHomePageStatus);
+                throw new DefinedError(ErrorCode.ErrorCode_InvalidHomePageStatus);
                 break;
         }
-    } catch (error) {
-        return Promise.reject(error);
-    }
 }
 
 module.exports = {
