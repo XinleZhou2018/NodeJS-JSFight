@@ -26,7 +26,7 @@
 
   class BaseModel {
     constructor(obj){
-      this.code = obj.defined_code;
+      this.code = obj.code;
       this.msg = obj.msg;
     }
   }
@@ -57,5 +57,4 @@
   module.exports = {
     SuccessModel,
     ErrorModel
-    // ReturnModel
   }

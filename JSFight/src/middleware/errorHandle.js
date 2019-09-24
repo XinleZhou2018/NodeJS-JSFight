@@ -1,5 +1,5 @@
-const {DefinedError} = require('../model/errorModel.js');
-const ErrorCode = require('../consts/const.js');
+const {InternalError, ExternalError} = require('../model/errorModel.js');
+const {DefaultErrorCode} = require('../consts/const.js');
 const { ErrorModel } = require('../model/resModel.js');
 
 async function errorHandler(ctx, next){
@@ -27,23 +27,28 @@ async function errorHandler(ctx, next){
          //已知错误都可以throw出自己包装的DefinedError对象
          //未知错误直接由系统捕捉到Error对象
 
-         if (err instanceof DefinedError){
-            //已知错误
-            //已知错误中，有些错误原因也是不可以直接告知前端，直接返回一个通用错误即可。这里区分是为了存储错误日志
-            if (err.errorObj.type && err.errorObj.type === 'Internal'){
-                //Internal是一个内部错误(例如解析json错误等)，原因不需要告诉前端
-                ctx.status = err.errorObj.status == null ? 200 : err.errorObj.status;
-                ctx.body = new ErrorModel(null, ErrorCode.ErrorCode_DefaultError);
-            }else{
-                //可以告知前端真实原因的错误
-                ctx.status = err.errorObj.status == null ? 200 : err.errorObj.status;
-                ctx.body = new ErrorModel(null, err.errorObj);
-            }
-         }else{
-            //未知错误 这里通过err.toString()把错误原因告诉了前端(方便debug)，其实也可以不告诉前端
+         if (err instanceof InternalError){
+            //已知错误，内部错误（不需要告知前端的错误，但是需要存储错误日志）
+
+            //记录存储日志 err.message err.errorObj TODO
+            // if(err.message == null){
+            //     err.errorObj.msg
+            // }
+    
+            //返回给前端
             ctx.status = 500;
-            ctx.body = new ErrorModel(err.toString(), ErrorCode.ErrorCode_DefaultError);
-            // ctx.body = new ErrorModel(null, ErrorCode.ErrorCode_DefaultError);
+            ctx.body = new ErrorModel(null, DefaultErrorCode);
+         }else if (err instanceof ExternalError){
+             //已知错误，外部错误（需要告知前端的错误）
+             ctx.status = 200;
+             ctx.body = new ErrorModel(null, err.errorObj);
+         }
+         else{
+            //未知错误 这里通过err.toString()把错误原因告诉了前端(方便debug)，其实也可以不告诉前端
+            //记录错误日志 TODO err.toString()
+            ctx.status = 500;
+            // ctx.body = new ErrorModel(err.toString(), ErrorCode.ErrorCode_DefaultError);
+            ctx.body = new ErrorModel(null, DefaultErrorCode);
          }
       }
 }

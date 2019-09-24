@@ -1,6 +1,6 @@
 const { getRedis } = require('../db/redis.js');
-const ErrorCode = require('../consts/const.js');
-const {DefinedError} = require('../model/errorModel.js');
+const { ExternalErrorCode, InternalErrorCode } = require('../consts/const.js');
+const {InternalError, ExternalError} = require('../model/errorModel.js');
 
 const queryString = require("querystring");
 
@@ -18,25 +18,26 @@ module.exports = async (ctx, next) =>{
         try {
             cookieValue = queryString.parse(ctx.request.header.cookie);
         } catch (error) {
-            throw new DefinedError(ErrorCode.ErrorCode_QueryStringParseError);
+            throw new InternalError(error.toString(), InternalErrorCode.ErrorCode_QueryStringParseError);
         }
 
         if (!cookieValue['session_id'] || cookieValue['session_id'].length <= 0){
-            throw new DefinedError(ErrorCode.ErrorCode_NotLogin);
+            throw new ExternalError(null ,ExternalErrorCode.ErrorCode_NotLogin);
         }else{
             let session_id = cookieValue['session_id'];
 
-            let value = await getRedis(session_id);
-    
+            let value
+            try {
+                value = await getRedis(session_id);
+            } catch (error) {
+                throw InternalError(error.toString(), InternalErrorCode.ErrorCode_RedisReadError);
+            }
+             
             if (value == null || value['userid'] == null || value['userid'].length <= 0){
-                throw new DefinedError(ErrorCode.ErrorCode_NotLogin);
+                throw new ExternalError(null ,ExternalErrorCode.ErrorCode_NotLogin);
             }else{
                 ctx.userid = value['userid'];
                 await next();
             }
         }
-
-
-    // let cookieValue = queryString.parse(ctx.headers.cookie,';');
-
 };

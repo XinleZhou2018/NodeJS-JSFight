@@ -1,4 +1,4 @@
-class DefinedError extends Error{
+class InternalError extends Error{
     /**
      * 目前还不支持多个构造函数
      */
@@ -8,15 +8,21 @@ class DefinedError extends Error{
     //     this.errorCode = errorCode;
     // };
 
-    constructor(errorObj){
-        super(errorObj.msg);
+    constructor(errorReason, errorObj){
+        super(errorReason);
         this.errorObj = errorObj;
     }
 }
 
-// let error = new DefinedError({message: '错误信息', code: 400});
-// console.log(error.message, error.errorObj);
+class ExternalError extends Error{
+    constructor(errorReason, errorObj){
+        super(errorReason);
+        this.errorObj = errorObj;
+    }
+}
+
 
 module.exports = {
-    DefinedError
+    InternalError,
+    ExternalError
 }

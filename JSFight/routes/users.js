@@ -1,8 +1,11 @@
 const { login, changeUserProfile } = require('../src/controller/user.js');
-const { SuccessModel, ErrorModel } = require('../src/model/resModel.js');
-const ErrorCode = require('../src/consts/const.js');
+const { SuccessModel } = require('../src/model/resModel.js');
+const {SuccessCode} = require('../src/consts/const.js');
 
 const router = require('koa-router')()
+
+//登录检查中间件
+const LoginCheck = require('../src/middleware/loginCheck.js');
 
 //用户登录
 const USER_LOGIN = '/login';
@@ -12,32 +15,15 @@ const USER_CHANGEPROFILE = '/changeprofile';
 
 router.prefix('/api/user')
 
-router.post(USER_LOGIN, async function (ctx, next){
-  try {
-      let result = await login(ctx);
-
-      ctx.body = new SuccessModel(result, ErrorCode.ErrorCode_Success);
-  } catch (error) {
-      if (error && error.defined_code){
-          ctx.body = new ErrorModel(null, error);
-      }else{
-          ctx.body = new ErrorModel(error.toString(), ErrorCode.ErrorCode_DefaultError);
-      }
-  }    
+router.post(USER_LOGIN, async function (ctx, next) {
+  let result = await login(ctx);
+  ctx.body = new SuccessModel(result, SuccessCode);
 });
 
-router.post(USER_CHANGEPROFILE, async function (ctx, next){
+router.post(USER_CHANGEPROFILE, LoginCheck, async function (ctx, next) {
   //TODO
-  try {
-    let result = await changeUserProfile(ctx);
-    ctx.body = new SuccessModel(result, ErrorCode.ErrorCode_Success);
-  } catch (error) {
-    if (error && error.defined_code){
-      ctx.body = new ErrorModel(null, error);
-  }else{
-      ctx.body = new ErrorModel(error.toString(), ErrorCode.ErrorCode_DefaultError);
-  }
-  }    
+  let result = await changeUserProfile(ctx);
+  ctx.body = new SuccessModel(result, SuccessCode);
 });
 
 module.exports = router;
