@@ -6,16 +6,13 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-const {DefinedError} = require('./src/model/errorModel.js');
-const { SuccessModel, ErrorModel } = require('./src/model/resModel.js')
-const ErrorCode = require('./src/consts/const.js');
-
 const errorHandler = require('./src/middleware/errorHandle.js');
 
 //import router
 const homepage = require('./routes/homepage')
 const match = require('./routes/match')
 const users = require('./routes/users')
+const notTarget = require('./routes/notTarget')
 
 // error handler
 onerror(app)
@@ -58,6 +55,8 @@ app.use(async (ctx, next) => {
 app.use(homepage.routes(), homepage.allowedMethods())
 app.use(match.routes(), match.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(notTarget.routes(), notTarget.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {

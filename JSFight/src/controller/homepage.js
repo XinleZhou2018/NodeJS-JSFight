@@ -74,7 +74,7 @@ async function getHomePageData() {
             break;
         }
         case 'WARM': {
-            //预热上一场比赛
+            //预热下一场比赛
             let timestampString = moment_time.unix();
 
             let sql = 'select* from ((select * from matches where unix_timestamp(match_date) < ? order by match_date desc limit 1) union all (select * from matches where unix_timestamp(match_date) > ? limit 1)) as total order by match_date desc';
