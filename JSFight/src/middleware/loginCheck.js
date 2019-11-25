@@ -16,6 +16,11 @@ module.exports = async (ctx, next) => {
 
     let cookieValue;
     try {
+        //前端是这样在header中添加cookie的
+        // header: {
+        //     // 'cookie': 'session_id=' + wx.getStorageSync("sessionid") + ';key=bbb' //读取cookie
+        //     'cookie': 'session_id=' + wx.getStorageSync("sessionid")
+        //   }
         cookieValue = queryString.parse(ctx.request.header.cookie);
     } catch (error) {
         throw new InternalError(error.toString(), InternalErrorCode.ErrorCode_QueryStringParseError);

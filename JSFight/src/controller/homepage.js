@@ -6,6 +6,10 @@ const {InternalErrorCode, ExternalErrorCode} = require('../consts/const.js');
 const {InternalError, ExternalError} = require('../model/errorModel.js');
 
 async function getHomePageData() {
+    //simulate failed
+    // throw new ExternalError(null, ExternalErrorCode.ErrorCode_InvalidHomePageStatus);
+
+    
     let moment_time = moment();
 
     //首先检查首页状态

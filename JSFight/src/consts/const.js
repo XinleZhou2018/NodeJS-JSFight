@@ -32,30 +32,42 @@ const ExternalErrorCode = {
     ErrorCode_InvalidHomePageStatus : {
         code : 1006,
         msg : '无效的首页状态值'
-    }
+    },
+    ErrorCode_ScoreFailed : {
+        code : 1007,
+        msg : '给球员打分失败'
+    },
+    ErrorCode_HaveScored : {
+        code : 1008,
+        msg : '已经打过分了'
+    },
 }
 
 const InternalErrorCode = {
     ErrorCode_QueryStringParseError : {
         code : 2001,
-        msg : 'queryString转换字符串到对象错误',
+        msg : 'queryString转换字符串到对象错误'
     },
     ErrorCode_MysqlExecError : {
         code : 2002,
-        msg : 'Mysql操作错误',
+        msg : 'Mysql操作错误'
     },
     ErrorCode_RedisReadError : {
         code : 2003,
-        msg : 'Redis读取错误',
+        msg : 'Redis读取错误'
     },
     ErrorCode_WechatJscode2sessionError : {
         code : 2004,
-        msg : '微信jscode2session API请求错误',
+        msg : '微信jscode2session API请求错误'
     },
     ErrorCode_GenerateUnixRandomNumError : {
         code : 2005,
-        msg : '生成UNIX随机字符串失败',
+        msg : '生成UNIX随机字符串失败'
     },
+    ErrorCode_MysqlQueryError_1 : {
+        code : 2006,
+        msg : 'Mysql查询返回数组null或长度小于等于0'
+    }
 }
 
 

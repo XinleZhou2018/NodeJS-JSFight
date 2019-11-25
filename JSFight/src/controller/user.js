@@ -17,11 +17,11 @@ async function login(ctx) {
     //参数判断
     let postData = ctx.request.body;
     if (!postData) {
-        throw ExternalError(null, ExternalErrorCode.ErrorCode_MissingParams);
+        throw new ExternalError(null, ExternalErrorCode.ErrorCode_MissingParams);
     }
 
     if (postData['code'] == null || postData['nickName'] == null) {
-        throw ExternalError(null, ExternalErrorCode.ErrorCode_MissingParams);
+        throw new ExternalError(null, ExternalErrorCode.ErrorCode_MissingParams);
     }
 
     const code = postData['code'];
@@ -96,7 +96,7 @@ async function login(ctx) {
             return Promise.resolve(key);
         } else {
             //注册失败 登录失败
-            throw ExternalError(null, ExternalErrorCode.ErrorCode_LoginFailed);
+            throw new ExternalError(null, ExternalErrorCode.ErrorCode_LoginFailed);
         }
     } else {
         //已经存在，直接走登录流程
