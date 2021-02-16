@@ -237,6 +237,7 @@ async function getScorePageInfo(ctx){
         let currentMatch = matchResult[0];
 
         //该场比赛各位球员出场的平均分
+        //
         // select s.match_id, s.player_id, avg(s.score) as avgscore, c.player_name, c.court_type from scores as s left join onCourt as c on s.player_id = c.player_id where s.match_id = 1 group by s.player_id, c.player_name, c.court_type order by avgscore desc;
         let avgSql = 'select s.match_id, s.player_id, avg(s.score) as avgscore, c.player_name, c.court_type from scores as s left join onCourt as c on s.player_id = c.player_id where s.match_id = ? group by s.player_id, c.player_name, c.court_type order by avgscore desc';
         let avgResult;
